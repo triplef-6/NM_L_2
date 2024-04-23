@@ -108,8 +108,9 @@ public class Gen
      * 1 2 1 1 простой структуры
      * 0 0 2 1 жордановы клетки
      */
-    public void mygen(double[][] a, double[][] a_inv, int n, double alpha, double beta, int sign_law, int lambda_law, int variant, int schema, boolean print_flag) {
+    public GenMatrixParam mygen(double[][] a, double[][] a_inv, int n, double alpha, double beta, int sign_law, int lambda_law, int variant, int schema, boolean print_flag) {
         int i,j,k;
+        GenMatrixParam genMatrixParam = new GenMatrixParam();
 
 //        System.out.println("   M A T R I X  G E N.  ");
 //        System.out.println("              N = "+ n);
@@ -156,7 +157,7 @@ public class Gen
                 break;
 
             case 2:
-                System.out.println(" kappa = sin( ) ");
+//                System.out.println(" kappa = sin( ) ");
                 double pi_half = Math.acos(-1.)*0.5;
                 for( i=0; i<n; i++ ) kappa[i] = Math.sin( pi_half*kappa[i] );
                 break;
@@ -439,12 +440,15 @@ public class Gen
         double norm,norm_inv;
 
         norm = matr_inf_norm ( a, n );
+        genMatrixParam.setA_norm(norm);
 //        System.out.println(" ||  A  || = " + norm );
 
         norm_inv = matr_inf_norm ( a_inv, n );
 //        System.out.println(" ||A_inv|| = " + norm_inv );
+        genMatrixParam.setA_inv_norm(norm_inv);
         double obusl = norm*norm_inv;
 //        System.out.println(" obusl = " + obusl );
+        genMatrixParam.setObusl(obusl);
         //невязка генерации
         double[][] r = matr_mul ( a, a_inv, n );
 
@@ -453,6 +457,7 @@ public class Gen
         norm = matr_inf_norm ( r, n );
 //        System.out.println(" ||R_gen|| = " + norm );
 
+        return genMatrixParam;
     }//mygen
 
 

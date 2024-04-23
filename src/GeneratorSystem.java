@@ -1,16 +1,26 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class SystemAb {
-    private final int n;
-    private final double[][] A;
-    private final double[] b;
+public class GeneratorSystem {
+    private int n;
+    private double[][] A;
+    private double[] b;
+    private double[] x_t;
     private double[] x;
+    private GenMatrixParam genMatrixParam;
+    private int iter_x;
 
-    public SystemAb(double[][] A, double[] b, int n) {
-        this.A = A;
-        this.b = b;
+    public GeneratorSystem(int n, double[] x_t, double alpha, double beta, double epsilon) {
+        Gen g = new Gen();
         this.n = n;
+        this.x_t = x_t;
+
+        A = new double[n][n];
+        double[][] _A_ = new double[n][n];
+        genMatrixParam = g.mygen(A, _A_, n, alpha, beta, 1, 2, 0, 1, false);
+
+        b = multiplication_nn_n(A, x_t);
+        x = system_solution(epsilon);
     }
 
     public double[] system_solution(double epsilon) { // сопряжённых градиентов
@@ -43,9 +53,8 @@ public class SystemAb {
 
 
         } while (norma_n(Rs.get(k)) / norma_b >= epsilon);
-
-        x = Xs.get(k);
-        return x;
+        iter_x = k;
+        return Xs.get(k);
     }
 
     private double[] multiplication_nn_n(double[][] A, double[] x) {
@@ -113,7 +122,6 @@ public class SystemAb {
 
         return res;
     }
-
     public double[][] getA() {
         return A;
     }
@@ -125,4 +133,29 @@ public class SystemAb {
     public double[] getX() {
         return x;
     }
+
+    public double[] getX_t() {
+        return x_t;
+    }
+
+    public GenMatrixParam getGenMatrixParam() {
+        return genMatrixParam;
+    }
+
+    public int getN() {
+        return n;
+    }
+
+    public int getIter_x() {
+        return iter_x;
+    }
 }
+
+
+
+
+
+
+
+
+
